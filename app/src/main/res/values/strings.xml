@@ -6,4 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="placeholder_parking_name">parkingName</string>
+    <string name="placeholder_parking_free_places">-1</string>
+    <string name="text_free_places">place(s) libre(s)</string>
 </resources>
