@@ -31,7 +31,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        val dataset = listOf("Antigone","Comédie","Gaumont")
+        val dataset = listOf(
+                Parking("Antigone", 10, 100),
+                Parking("Comédie", 50, 80),
+                Parking("Gaumont", 60, 120),
+                Parking("Random1", 10, 190),
+                Parking("Random2", 99, 120),
+                Parking("Random3", 33, 95))
 
         viewParkingManager = LinearLayoutManager(this)
         viewParkingAdapter = ParkingAdapter(dataset.toTypedArray())

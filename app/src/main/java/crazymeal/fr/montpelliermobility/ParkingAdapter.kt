@@ -4,10 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import java.security.SecureRandom
 
-class ParkingAdapter(private val dataset: Array<String>): RecyclerView.Adapter<ParkingAdapter.ViewHolder>() {
+class ParkingAdapter(private val dataset: Array<Parking>): RecyclerView.Adapter<ParkingAdapter.ViewHolder>() {
 
     class ViewHolder(val parkingView: View) : RecyclerView.ViewHolder(parkingView)
 
@@ -27,9 +28,13 @@ class ParkingAdapter(private val dataset: Array<String>): RecyclerView.Adapter<P
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val parkingName = holder.parkingView.findViewById<TextView>(R.id.text_view_parking_name)
-        parkingName.text = dataset[position]
+        parkingName.text = dataset[position].name
 
         val parkingFreePlaces = holder.parkingView.findViewById<TextView>(R.id.text_view_parking_free_places)
-        parkingFreePlaces.text = SecureRandom().nextInt(500).toString()
+        parkingFreePlaces.text = dataset[position].freePlaces.toString() + "/" + dataset[position].maxPlaces.toString()
+
+        val progressBar = holder.parkingView.findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.progress = dataset[position].occupation
+        progressBar.max = 100
     }
 }
