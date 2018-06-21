@@ -1,5 +1,7 @@
 package crazymeal.fr.montpelliermobility
 
+import android.app.Fragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -13,7 +15,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
 
     private lateinit var recyclerViewParking: RecyclerView
     private lateinit var viewParkingAdapter: RecyclerView.Adapter<*>
@@ -31,6 +33,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
+        this.loadParkingListFragment()
+
+        val downloadTask = AllParkingAsyncTask()
+        downloadTask.execute("http://www.google.fr")
+
+        /*
         val dataset = listOf(
                 Parking("Antigone", 10, 100),
                 Parking("Comédie", 50, 80),
@@ -46,6 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             layoutManager = viewParkingManager
             adapter = viewParkingAdapter
         }
+        */
+
     }
 
     override fun onBackPressed() {
@@ -76,10 +86,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_camera -> {
-                // Handle the camera action
+                this.loadBlankFragment()
             }
             R.id.nav_gallery -> {
-
+                this.loadParkingListFragment()
             }
             R.id.nav_slideshow -> {
 
@@ -97,5 +107,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onListFragmentInteraction(parking: Parking?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun loadBlankFragment() {
+        supportFragmentManager.beginTransaction().replace(R.id.layout_content, BlankFragment()).commit()
+    }
+
+    private fun loadParkingListFragment() {
+        supportFragmentManager.beginTransaction().replace(R.id.layout_content, ParkingFragment()).commit()
     }
 }

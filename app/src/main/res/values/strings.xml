@@ -9,4 +9,7 @@
     <string name="placeholder_parking_name">parkingName</string>
     <string name="placeholder_parking_free_places">-1</string>
     <string name="text_free_places">place(s) libre(s)</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
