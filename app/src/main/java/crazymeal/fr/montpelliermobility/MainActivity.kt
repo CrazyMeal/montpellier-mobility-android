@@ -1,25 +1,34 @@
 package crazymeal.fr.montpelliermobility
 
-import android.app.Fragment
-import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.github.kittinunf.fuel.core.ResponseDeserializable
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
 
     private lateinit var recyclerViewParking: RecyclerView
     private lateinit var viewParkingAdapter: RecyclerView.Adapter<*>
     private lateinit var viewParkingManager: RecyclerView.LayoutManager
+
+    private val dataset = listOf(
+            Parking("Antigone", 10, 100),
+            Parking("Comédie", 50, 80),
+            Parking("Gaumont", 60, 120),
+            Parking("Random1", 10, 190),
+            Parking("Random2", 99, 120),
+            Parking("Random3", 33, 95))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,28 +43,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         this.loadParkingListFragment()
-
-        val downloadTask = AllParkingAsyncTask()
-        downloadTask.execute("http://www.google.fr")
-
-        /*
-        val dataset = listOf(
-                Parking("Antigone", 10, 100),
-                Parking("Comédie", 50, 80),
-                Parking("Gaumont", 60, 120),
-                Parking("Random1", 10, 190),
-                Parking("Random2", 99, 120),
-                Parking("Random3", 33, 95))
-
-        viewParkingManager = LinearLayoutManager(this)
-        viewParkingAdapter = ParkingAdapter(dataset.toTypedArray())
-
-        this.recyclerViewParking = findViewById<RecyclerView>(R.id.recyclerViewParking).apply {
-            layoutManager = viewParkingManager
-            adapter = viewParkingAdapter
-        }
-        */
-
     }
 
     override fun onBackPressed() {
@@ -114,10 +101,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadBlankFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.layout_content, BlankFragment()).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.layout_content, BlankFragment())
+            .commit()
     }
 
     private fun loadParkingListFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.layout_content, ParkingFragment()).commit()
+        val bundle = Bundle()
+        bundle.putSerializable("parkingList", this.dataset.toTypedArray())
+
+        val parkingFragment = ParkingFragment()
+        parkingFragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.layout_content, parkingFragment)
+            .commit()
+
+        val urlString = "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml"
+        urlString!!.httpGet().responseObject(Parking.Deserializer()) { request, response, result ->
+            when(result) {
+                is Result.Failure -> {
+                    Log.e("DOWNLOAD_ASYNC", result.getException().toString())
+                }
+                is Result.Success -> {
+                    Log.i("DOWNLOAD_ASYNC", "Got some parking > " + result.component1().toString())
+                    this.dataset.plus(result.component1())
+                    parkingFragment.notifyAdapter()
+                }
+            }
+
+
+        }
     }
 }

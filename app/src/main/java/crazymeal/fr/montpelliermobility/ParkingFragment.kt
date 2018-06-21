@@ -11,16 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Parkings.
  * Activities containing this fragment MUST implement the
  * [ParkingFragment.OnListFragmentInteractionListener] interface.
  */
 class ParkingFragment : Fragment() {
 
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
+
+    private var adapter: ParkingFragmentAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +42,9 @@ class ParkingFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                val dataset = listOf(
-                        Parking("Antigone", 10, 100),
-                        Parking("Comédie", 50, 80),
-                        Parking("Gaumont", 60, 120),
-                        Parking("Random1", 10, 190),
-                        Parking("Random2", 99, 120),
-                        Parking("Random3", 33, 95))
-
-                adapter = ParkingFragmentAdapter(dataset, listener)
+                val mValues= arguments?.getSerializable("parkingList") as Array<Parking>?
+                adapter = ParkingFragmentAdapter(mValues?.toList().orEmpty(), listener)
+                this.adapter = adapter
             }
         }
         return view
@@ -69,6 +64,10 @@ class ParkingFragment : Fragment() {
         listener = null
     }
 
+    fun notifyAdapter() {
+        this.adapter?.notifyDataSetChanged()
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -86,10 +85,8 @@ class ParkingFragment : Fragment() {
 
     companion object {
 
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
                 ParkingFragment().apply {
