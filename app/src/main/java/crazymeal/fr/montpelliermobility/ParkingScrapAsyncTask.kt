@@ -32,7 +32,7 @@ class ParkingScrapAsyncTask(parkingFragment: ParkingFragment) : AsyncTask<String
 
     override fun onPostExecute(result: Parking?) {
         Log.i("DOWNLOAD_ASYNC", "Notifying the fragment with parking > " + result)
-        parkingFragment.notifyAdapter(result)
+        parkingFragment.notifyAdapter(result!!)
 
         super.onPostExecute(result)
     }

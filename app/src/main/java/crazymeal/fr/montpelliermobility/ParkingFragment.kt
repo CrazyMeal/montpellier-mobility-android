@@ -21,9 +21,11 @@ class ParkingFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    private var adapter: ParkingFragmentAdapter? = null
+    private lateinit var parkingList: ArrayList<Parking>
 
-    private lateinit var parkingList: List<Parking>
+    private lateinit var parkingView: RecyclerView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,18 +42,17 @@ class ParkingFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-//                layoutManager = when {
-//                    columnCount <= 1 -> LinearLayoutManager(context)
-//                    else -> GridLayoutManager(context, columnCount)
-//                }
                 layoutManager = LinearLayoutManager(context)
                 val mValues= arguments?.getSerializable("parkingList") as Array<Parking>?
-                parkingList = mValues?.toList().orEmpty()
-                adapter = ParkingFragmentAdapter(parkingList, listener)
-                this.adapter = adapter
+                parkingList = mValues?.toList().orEmpty() as ArrayList
             }
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        this.parkingView = view as RecyclerView
+        this.parkingView.adapter = ParkingFragmentAdapter(parkingList, listener)
     }
 
     override fun onAttach(context: Context) {
@@ -68,9 +69,9 @@ class ParkingFragment : Fragment() {
         listener = null
     }
 
-    fun notifyAdapter(parking: Parking?) {
-        this.parkingList.plus(parking)
-        this.adapter?.notifyDataSetChanged()
+    fun notifyAdapter(parking: Parking) {
+        this.parkingList.add(parking)
+        this.parkingView.adapter.notifyDataSetChanged()
     }
 
     /**

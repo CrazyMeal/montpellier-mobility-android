@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
 
-    private val dataset = listOf(
+    private val dataset = mutableListOf<Parking>(
             Parking("Antigone", 10, 100),
             Parking("Comédie", 50, 80),
             Parking("Gaumont", 60, 120),
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val bundle = Bundle()
         bundle.putSerializable("parkingList", this.dataset.toTypedArray())
 
-        var someFragent = supportFragmentManager.findFragmentById(R.id.recyclerViewParking)
+
 
         val parkingFragment = ParkingFragment.newInstance()
         parkingFragment.arguments = bundle
@@ -109,6 +109,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.layout_content, parkingFragment)
             .commit()
+
+        var someFragent = supportFragmentManager.findFragmentById(R.id.recyclerViewParking)
 
         val task = ParkingScrapAsyncTask(parkingFragment)
         task.execute()
