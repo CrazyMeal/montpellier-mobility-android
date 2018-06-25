@@ -23,12 +23,14 @@ class ParkingFragment : Fragment() {
 
     private var adapter: ParkingFragmentAdapter? = null
 
+    private lateinit var parkingList: List<Parking>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+//        arguments?.let {
+//            columnCount = it.getInt(ARG_COLUMN_COUNT)
+//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -38,12 +40,14 @@ class ParkingFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+                layoutManager = LinearLayoutManager(context)
                 val mValues= arguments?.getSerializable("parkingList") as Array<Parking>?
-                adapter = ParkingFragmentAdapter(mValues?.toList().orEmpty(), listener)
+                parkingList = mValues?.toList().orEmpty()
+                adapter = ParkingFragmentAdapter(parkingList, listener)
                 this.adapter = adapter
             }
         }
@@ -64,7 +68,8 @@ class ParkingFragment : Fragment() {
         listener = null
     }
 
-    fun notifyAdapter() {
+    fun notifyAdapter(parking: Parking?) {
+        this.parkingList.plus(parking)
         this.adapter?.notifyDataSetChanged()
     }
 
@@ -88,11 +93,12 @@ class ParkingFragment : Fragment() {
         const val ARG_COLUMN_COUNT = "column-count"
 
         @JvmStatic
-        fun newInstance(columnCount: Int) =
-                ParkingFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_COLUMN_COUNT, columnCount)
-                    }
-                }
+        fun newInstance() =
+                ParkingFragment()
+//                        .apply {
+//                    arguments = Bundle().apply {
+//                        putInt(ARG_COLUMN_COUNT, columnCount)
+//                    }
+//                }
     }
 }

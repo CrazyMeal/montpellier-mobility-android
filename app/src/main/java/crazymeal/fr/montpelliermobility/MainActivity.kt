@@ -5,22 +5,12 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.github.kittinunf.fuel.core.ResponseDeserializable
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.result.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
-
-    private lateinit var recyclerViewParking: RecyclerView
-    private lateinit var viewParkingAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewParkingManager: RecyclerView.LayoutManager
 
     private val dataset = listOf(
             Parking("Antigone", 10, 100),
@@ -110,27 +100,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val bundle = Bundle()
         bundle.putSerializable("parkingList", this.dataset.toTypedArray())
 
-        val parkingFragment = ParkingFragment()
+        val parkingFragment = ParkingFragment.newInstance()
         parkingFragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.layout_content, parkingFragment)
             .commit()
 
-        val urlString = "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml"
-        urlString!!.httpGet().responseObject(Parking.Deserializer()) { request, response, result ->
-            when(result) {
-                is Result.Failure -> {
-                    Log.e("DOWNLOAD_ASYNC", result.getException().toString())
-                }
-                is Result.Success -> {
-                    Log.i("DOWNLOAD_ASYNC", "Got some parking > " + result.component1().toString())
-                    this.dataset.plus(result.component1())
-                    parkingFragment.notifyAdapter()
-                }
-            }
-
-
-        }
+        val task = ParkingScrapAsyncTask(parkingFragment)
+        task.execute()
     }
 }
