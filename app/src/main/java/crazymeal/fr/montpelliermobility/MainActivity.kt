@@ -100,6 +100,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val bundle = Bundle()
         bundle.putSerializable("parkingList", this.dataset.toTypedArray())
 
+        var someFragent = supportFragmentManager.findFragmentById(R.id.recyclerViewParking)
+
         val parkingFragment = ParkingFragment.newInstance()
         parkingFragment.arguments = bundle
 
