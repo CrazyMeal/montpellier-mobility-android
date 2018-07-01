@@ -7,12 +7,15 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import crazymeal.fr.montpelliermobility.parking.Parking
+import crazymeal.fr.montpelliermobility.parking.ParkingFragment
+import crazymeal.fr.montpelliermobility.parking.ParkingScrapAsyncTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
 
-    private val dataset = mutableListOf<Parking>(
+    private val dataset = mutableListOf(
             Parking("Antigone", 10, 100),
             Parking("Comédie", 50, 80),
             Parking("Gaumont", 60, 120),
@@ -92,6 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun loadBlankFragment() {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.layout_content, BlankFragment())
             .commit()
     }
@@ -109,8 +113,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.layout_content, parkingFragment)
             .commit()
-
-        var someFragent = supportFragmentManager.findFragmentById(R.id.recyclerViewParking)
 
         val task = ParkingScrapAsyncTask(parkingFragment)
         task.execute()
