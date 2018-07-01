@@ -43,8 +43,7 @@ class ParkingFragment : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                val mValues= arguments?.getSerializable("parkingList") as Array<Parking>?
-                parkingList = mValues?.toList().orEmpty() as ArrayList
+                parkingList = ArrayList()
             }
         }
         return view

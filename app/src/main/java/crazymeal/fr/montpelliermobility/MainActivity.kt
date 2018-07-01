@@ -15,13 +15,29 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ParkingFragment.OnListFragmentInteractionListener {
 
-    private val dataset = mutableListOf(
-            Parking("Antigone", 10, 100),
-            Parking("Comédie", 50, 80),
-            Parking("Gaumont", 60, 120),
-            Parking("Random1", 10, 190),
-            Parking("Random2", 99, 120),
-            Parking("Random3", 33, 95))
+    private val urlToGrab = listOf(
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ANTI.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ARCT.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_COME.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CORU.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_EURO.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_FOCH.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GAMB.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARE.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_TRIA.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_PITO.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CIRC.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARC.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABI.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABL.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_STJ_SJLC.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MEDC.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_OCCI.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_CAS_VICA.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA109.xml",
+        "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA250.xml"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,20 +117,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadParkingListFragment() {
-        val bundle = Bundle()
-        bundle.putSerializable("parkingList", this.dataset.toTypedArray())
-
-
-
         val parkingFragment = ParkingFragment.newInstance()
-        parkingFragment.arguments = bundle
 
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.layout_content, parkingFragment)
             .commit()
 
-        val task = ParkingScrapAsyncTask(parkingFragment)
-        task.execute()
+        this.urlToGrab.forEach { url -> ParkingScrapAsyncTask(parkingFragment).execute(url) }
     }
 }
