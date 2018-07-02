@@ -44,6 +44,7 @@ class ParkingFragmentAdapter(
         val parking = mValues[position]
         holder.mParkingNameView.text = parking.name
         holder.mFreePlacesView.text = parking.freePlaces.toString()
+        holder.mTotalPlacesView.text = parking.maxPlaces.toString()
         holder.mParkingOccupationBar.max = 100
         holder.mParkingOccupationBar.progress = parking.occupation
 
@@ -57,6 +58,7 @@ class ParkingFragmentAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mFreePlacesView: TextView = mView.text_view_parking_free_places
+        val mTotalPlacesView: TextView = mView.text_view_parking_total_places
         val mParkingNameView: TextView = mView.text_view_parking_name
         val mParkingOccupationBar: ProgressBar = mView.progressBar
 

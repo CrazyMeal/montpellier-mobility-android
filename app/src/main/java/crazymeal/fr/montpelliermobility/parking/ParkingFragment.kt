@@ -3,6 +3,7 @@ package crazymeal.fr.montpelliermobility.parking
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -30,9 +31,9 @@ class ParkingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        arguments?.let {
-//            columnCount = it.getInt(ARG_COLUMN_COUNT)
-//        }
+        arguments?.let {
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,10 @@ class ParkingFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = LinearLayoutManager(context)
+                layoutManager = when {
+                    columnCount <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount)
+                }
                 parkingList = ArrayList()
             }
         }
@@ -95,10 +99,10 @@ class ParkingFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
                 ParkingFragment()
-//                        .apply {
-//                    arguments = Bundle().apply {
-//                        putInt(ARG_COLUMN_COUNT, columnCount)
-//                    }
-//                }
+                        .apply {
+                    arguments = Bundle().apply {
+                        putInt(ARG_COLUMN_COUNT, columnCount)
+                    }
+                }
     }
 }
