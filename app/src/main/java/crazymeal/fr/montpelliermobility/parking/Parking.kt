@@ -2,6 +2,7 @@ package crazymeal.fr.montpelliermobility.parking
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import org.xml.sax.InputSource
 import java.io.StringReader
@@ -42,9 +43,40 @@ data class Parking(val name: String, val freePlaces: Int, val maxPlaces: Int) : 
             val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input)
 
             val parkingName = document.getElementsByTagName("Name").item(0).textContent
+
+            val associatedName = this.getAssociatedName(parkingName)
+
             val freePlaces = document.getElementsByTagName("Free").item(0).textContent
             val totalPlaces = document.getElementsByTagName("Total").item(0).textContent
-            return Parking(parkingName, freePlaces.toInt(), totalPlaces.toInt())
+
+            return Parking(associatedName, freePlaces.toInt(), totalPlaces.toInt())
+        }
+
+        private fun getAssociatedName(parkingName: String?): String {
+            return when(parkingName) {
+                "ANTI" -> "Antigone"
+                "ARCT" -> "Arc de Triomphe"
+                "COME" -> "Comédie"
+                "CORU" -> "Corum"
+                "EURO" -> "Europa"
+                "FOCH" -> "Foch"
+                "GAMB" -> "Gambetta"
+                "GARE" -> "Gare"
+                "Triangle" -> "Triangle"
+                "Pitot" -> "Pitot"
+                "CIRC" -> "Circe"
+                "GARD" -> "Garcia Lorca"
+                "MOSS" -> "Mosson"
+                "SABI" -> "Sabines"
+                "SABL" -> "Sablassou"
+                "SJLC" -> "Saint Jean Le Sec"
+                "MEDC" -> "Euromédecine"
+                "OCCI" -> "Occitanie"
+                "VICA" -> "Vicarello"
+                "GAUMONT-EST" -> "Gaumont EST"
+                "GAUMONT-OUEST" -> "Gaumont OUEST"
+                else -> parkingName ?: "?"
+            }
         }
     }
 }

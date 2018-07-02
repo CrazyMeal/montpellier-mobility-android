@@ -10,23 +10,32 @@ class ParkingScrapAsyncTask(parkingFragment: ParkingFragment) : AsyncTask<String
     val parkingFragment = parkingFragment
 
     override fun doInBackground(vararg url: String?): Parking? {
-        val (request, response, result) = url[0]!!.httpGet().responseObject(Parking.Deserializer())
+        try {
+            val (request, response, result) = url[0]!!.httpGet().responseObject(Parking.Deserializer())
 
-        return when (response.statusCode) {
-            200 -> {
-                Log.i("DOWNLOAD_ASYNC", "Got 200 response code for URL > " + url[0])
-                result.component1()
+            return when (response.statusCode) {
+                200 -> {
+                    Log.i("DOWNLOAD_ASYNC", "Got 200 response code for URL > " + url[0])
+                    result.component1()
+                }
+                else -> {
+                    Log.i("DOWNLOAD_ASYNC", "Failed to get response (code: " + response.statusCode + ") for URL > " + url[0])
+                    null
+                }
             }
-            else -> {
-                Log.i("DOWNLOAD_ASYNC", "Failed to get response (code: " + response.statusCode + ") for URL > " + url[0])
-                null
-            }
+        } catch (e: Exception) {
+            Log.e("DOWNLOAD_ASYNC", "An exception occured during AsyncTask", e)
+            return null
         }
+
     }
 
     override fun onPostExecute(result: Parking?) {
-        Log.i("DOWNLOAD_ASYNC", "Notifying the fragment with parking > " + result!!)
-        parkingFragment.notifyAdapter(result)
+        result?.let {
+            Log.i("DOWNLOAD_ASYNC", "Notifying the fragment with parking > $result")
+            parkingFragment.notifyAdapter(result)
+        }
+
         super.onPostExecute(result)
     }
 }
