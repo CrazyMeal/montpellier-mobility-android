@@ -3,13 +3,16 @@ package crazymeal.fr.montpelliermobility.parking
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import crazymeal.fr.montpelliermobility.R
+import kotlinx.android.synthetic.main.fragment_parking_list.*
 
 /**
  * A fragment representing a list of Parkings.
@@ -20,13 +23,37 @@ class ParkingFragment : Fragment() {
 
     private var columnCount = 1
 
-    private var listener: OnListFragmentInteractionListener? = null
+    private var currentlyDownloadingParking: MutableList<String> = ArrayList()
+
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+
+    private lateinit var listener: OnListFragmentInteractionListener
 
     private lateinit var parkingList: ArrayList<Parking>
 
-    private lateinit var parkingView: RecyclerView
-
-
+    private val urlToScrap = mapOf<String, String>(
+            "ANTI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ANTI.xml",
+            "ARCT" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ARCT.xml",
+            "COME" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_COME.xml",
+            "CORU" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CORU.xml",
+            "EURO" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_EURO.xml",
+            "FOCH" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_FOCH.xml",
+            "GAMB" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GAMB.xml",
+            "GARE" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARE.xml",
+            "Triangle" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_TRIA.xml",
+            "Pitot" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_PITO.xml",
+            "CIRC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CIRC.xml",
+            "GARD" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARC.xml",
+            "MOSS" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml",
+            "SABI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABI.xml",
+            "SABL" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABL.xml",
+            "SJLC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_STJ_SJLC.xml",
+            "MEDC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MEDC.xml",
+            "OCCI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_OCCI.xml",
+            "VICA" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_CAS_VICA.xml",
+            "GAUMONT-EST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA109.xml",
+            "GAUMONT-OUEST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA250.xml"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,22 +67,26 @@ class ParkingFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_parking_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                parkingList = ArrayList()
-            }
+        if (view is SwipeRefreshLayout) {
+            this.mSwipeRefreshLayout = view
+            this.mSwipeRefreshLayout.isRefreshing = false
+            this.mSwipeRefreshLayout.setOnRefreshListener { this.loadParkingDatas() }
         }
-        return view
+
+        return this.mSwipeRefreshLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        this.parkingView = view as RecyclerView
-        this.parkingView.adapter = ParkingFragmentAdapter(parkingList, listener)
+        with(this.list) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+        }
+        parkingList = ArrayList()
+        this.list.adapter = ParkingFragmentAdapter(parkingList, listener)
+
+        this.loadParkingDatas()
     }
 
     override fun onAttach(context: Context) {
@@ -67,14 +98,29 @@ class ParkingFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
     fun notifyAdapter(parking: Parking) {
         this.parkingList.add(parking)
-        this.parkingView.adapter.notifyDataSetChanged()
+        this.list.adapter.notifyDataSetChanged()
+
+        Log.d("DOWNLOADING_QUEUE", "Removing technical id ${parking.technicalName}")
+        this.currentlyDownloadingParking.remove(parking.technicalName)
+        Log.d("DOWNLOADING_QUEUE", "Download queue > ${this.currentlyDownloadingParking}")
+        if (this.currentlyDownloadingParking.isEmpty()) {
+            Log.d("DOWNLOADING_QUEUE", "All URLs has been downloaded, setting refresh to false")
+            this.mSwipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun loadParkingDatas() {
+        Log.d("DOWNLOADING_QUEUE", "Setting refresh to true")
+        this.mSwipeRefreshLayout.isRefreshing = true
+
+        this.urlToScrap.forEach { id, url ->
+            Log.d("DOWNLOADING_QUEUE", "Adding URL ${url} to queue with id ${id}")
+            this.currentlyDownloadingParking.add(id)
+
+            ParkingScrapAsyncTask(this).execute(url)
+        }
     }
 
     /**

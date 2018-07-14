@@ -2,22 +2,24 @@ package crazymeal.fr.montpelliermobility.parking
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import org.xml.sax.InputSource
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
-data class Parking(val name: String, val freePlaces: Int, val maxPlaces: Int) : Parcelable {
+data class Parking(val technicalName: String, val name: String, val freePlaces: Int, val maxPlaces: Int) : Parcelable {
     val occupation get() = (this.freePlaces * 100) / this.maxPlaces
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
+            parcel.readString(),
             parcel.readInt(),
-            parcel.readInt()) {
+            parcel.readInt()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(technicalName)
         parcel.writeString(name)
         parcel.writeInt(freePlaces)
         parcel.writeInt(maxPlaces)
@@ -49,7 +51,7 @@ data class Parking(val name: String, val freePlaces: Int, val maxPlaces: Int) : 
             val freePlaces = document.getElementsByTagName("Free").item(0).textContent
             val totalPlaces = document.getElementsByTagName("Total").item(0).textContent
 
-            return Parking(associatedName, freePlaces.toInt(), totalPlaces.toInt())
+            return Parking(parkingName, associatedName, freePlaces.toInt(), totalPlaces.toInt())
         }
 
         private fun getAssociatedName(parkingName: String?): String {
