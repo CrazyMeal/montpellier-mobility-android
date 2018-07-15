@@ -7,9 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import crazymeal.fr.montpelliermobility.R
 import kotlinx.android.synthetic.main.fragment_parking_list.*
 
@@ -61,6 +59,8 @@ class ParkingFragment : Fragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
+
+        this.setHasOptionsMenu(true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +99,27 @@ class ParkingFragment : Fragment() {
         parkingList = ArrayList()
         this.list.adapter = ParkingFragmentAdapter(parkingList, listener)
         this.loadParkingDatas()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.let {
+            inflater.inflate(R.menu.menu_parking_list, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            return when (item.itemId) {
+                R.id.menu_refresh -> {
+                    this.loadParkingDatas()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     fun notifyAdapter(parking: Parking) {

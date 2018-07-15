@@ -15,4 +15,5 @@
     <string name="separator_slash">/</string>
     <string name="placeholder_parking_total_places">-1</string>
     <string name="nav_parking_title">Parkings</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>
