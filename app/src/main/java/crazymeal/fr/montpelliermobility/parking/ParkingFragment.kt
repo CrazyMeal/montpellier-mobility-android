@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ class ParkingFragment : Fragment() {
 
     private lateinit var parkingList: ArrayList<Parking>
 
-    private val urlToScrap = mapOf<String, String>(
+    private val urlToScrap = mapOf(
             "ANTI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ANTI.xml",
             "ARCT" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ARCT.xml",
             "COME" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_COME.xml",
@@ -54,6 +53,15 @@ class ParkingFragment : Fragment() {
             "GAUMONT-EST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA109.xml",
             "GAUMONT-OUEST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA250.xml"
     )
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnListFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,31 +91,32 @@ class ParkingFragment : Fragment() {
                 else -> GridLayoutManager(context, columnCount)
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         parkingList = ArrayList()
         this.list.adapter = ParkingFragmentAdapter(parkingList, listener)
-
         this.loadParkingDatas()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
-    }
-
     fun notifyAdapter(parking: Parking) {
-        this.parkingList.add(parking)
-        this.list.adapter.notifyDataSetChanged()
+        with(this.parkingList) {
+            removeIf { p -> p.technicalName == parking.technicalName }
+            add(parking)
+        }
 
-        Log.d("DOWNLOADING_QUEUE", "Removing technical id ${parking.technicalName}")
-        this.currentlyDownloadingParking.remove(parking.technicalName)
-        Log.d("DOWNLOADING_QUEUE", "Download queue > ${this.currentlyDownloadingParking}")
-        if (this.currentlyDownloadingParking.isEmpty()) {
-            Log.d("DOWNLOADING_QUEUE", "All URLs has been downloaded, setting refresh to false")
-            this.mSwipeRefreshLayout.isRefreshing = false
+        with(this.currentlyDownloadingParking) {
+            Log.d("DOWNLOADING_QUEUE", "Removing technical id ${parking.technicalName} from downloading queue")
+            remove(parking.technicalName)
+
+            Log.d("DOWNLOADING_QUEUE", "Download queue now looks like: ${this}")
+            if (isEmpty()) {
+                Log.d("DOWNLOADING_QUEUE", "All URLs has been downloaded, setting refresh to false and notifying adapter")
+                mSwipeRefreshLayout.isRefreshing = false
+                list.adapter.notifyDataSetChanged()
+            }
         }
     }
 

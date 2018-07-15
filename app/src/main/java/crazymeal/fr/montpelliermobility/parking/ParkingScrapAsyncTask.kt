@@ -7,7 +7,7 @@ import com.github.kittinunf.result.Result
 
 class ParkingScrapAsyncTask(parkingFragment: ParkingFragment) : AsyncTask<String, Int, Parking?>() {
 
-    val parkingFragment = parkingFragment
+    private val parkingFragment = parkingFragment
 
     override fun doInBackground(vararg url: String?): Parking? {
         try {
