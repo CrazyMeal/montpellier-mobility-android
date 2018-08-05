@@ -16,6 +16,7 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
@@ -83,6 +84,10 @@ class MapFragment : Fragment() {
         map.isVerticalMapRepetitionEnabled = false
         map.minZoomLevel = 14.0
 
+        var boundingBox = BoundingBox(43.663857,3.944800,43.555588,3.809666)
+        map.setScrollableAreaLimitDouble(boundingBox)
+
+
         val mapController = map.controller
         mapController.setZoom(19.0)
         val startPoint = GeoPoint(43.610053, 3.878702)
@@ -105,7 +110,7 @@ class MapFragment : Fragment() {
             }
 
             override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
-                return true
+                return false
             }
         }
 
