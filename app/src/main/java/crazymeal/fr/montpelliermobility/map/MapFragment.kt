@@ -16,6 +16,10 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -77,7 +81,7 @@ class MapFragment : Fragment() {
         map.setMultiTouchControls(true)
         map.isHorizontalMapRepetitionEnabled = false
         map.isVerticalMapRepetitionEnabled = false
-        //map.minZoomLevel = 9.0
+        map.minZoomLevel = 14.0
 
         val mapController = map.controller
         mapController.setZoom(19.0)
@@ -87,6 +91,29 @@ class MapFragment : Fragment() {
         var mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), map)
         mLocationOverlay.enableMyLocation()
         map.overlays.add(mLocationOverlay)
+
+
+
+        //your items
+        var items = ArrayList<OverlayItem>()
+        items.add(OverlayItem("Title", "Description", GeoPoint(43.608502,3.868672)))
+
+
+        var itemGestureListener = object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+            override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
+                return true
+            }
+
+            override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
+                return true
+            }
+        }
+
+        //the overlay
+        var mOverlay = ItemizedOverlayWithFocus<OverlayItem>(items, itemGestureListener, context)
+        mOverlay.setFocusItemsOnTap(true);
+
+        map.overlays.add(mOverlay);
 
         return inflatedView
     }
