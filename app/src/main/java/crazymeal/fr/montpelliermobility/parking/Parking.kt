@@ -8,7 +8,8 @@ import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
 data class Parking(val technicalName: String, val name: String, val freePlaces: Int, val maxPlaces: Int) : Parcelable {
-    val occupation get() = (this.freePlaces * 100) / this.maxPlaces
+    val occupiedPlaces get() = this.maxPlaces - this.freePlaces
+    val occupation get() = (this.occupiedPlaces * 100) / this.maxPlaces
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),

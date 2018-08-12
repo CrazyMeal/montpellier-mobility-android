@@ -17,4 +17,5 @@
     <string name="nav_parking_title">Parkings</string>
     <string name="menu_refresh">Refresh</string>
     <string name="nav_map">Map</string>
+    <string name="placeholder_parking_occupied_places">-1</string>
 </resources>
