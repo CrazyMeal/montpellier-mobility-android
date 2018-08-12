@@ -123,12 +123,13 @@ class ParkingFragment : Fragment() {
 
         this.resources.getStringArray(R.array.parking_ids).forEach { id ->
             val arrayId = this.resources.getIdentifier(id, "array", this.context!!.packageName)
+            val parkingName = this.resources.getStringArray(arrayId)[0]
             val url = this.resources.getStringArray(arrayId)[1]
 
             Log.d("DOWNLOADING_QUEUE", "Adding URL $url to queue with id $id")
             this.currentlyDownloadingParking.add(id)
 
-            ParkingScrapAsyncTask(this).execute(url)
+            ParkingScrapAsyncTask(this).execute(parkingName, url)
         }
     }
 

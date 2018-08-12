@@ -3,23 +3,24 @@ package crazymeal.fr.montpelliermobility.parking
 import android.os.AsyncTask
 import android.util.Log
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.result.Result
 
 class ParkingScrapAsyncTask(parkingFragment: ParkingFragment) : AsyncTask<String, Int, Parking?>() {
 
     private val parkingFragment = parkingFragment
 
-    override fun doInBackground(vararg url: String?): Parking? {
+    override fun doInBackground(vararg taskArguments: String?): Parking? {
         try {
-            val (request, response, result) = url[0]!!.httpGet().responseObject(Parking.Deserializer())
+            val (request, response, result) = taskArguments[1]!!.httpGet().responseObject(Parking.Deserializer())
 
             return when (response.statusCode) {
                 200 -> {
-                    Log.i("DOWNLOAD_ASYNC", "Got 200 response code for URL > " + url[0])
-                    result.component1()
+                    Log.i("DOWNLOAD_ASYNC", "Got 200 response code for URL > " + taskArguments[1])
+                    val parking = result.component1() as Parking
+                    parking.name = taskArguments[0]
+                    parking
                 }
                 else -> {
-                    Log.i("DOWNLOAD_ASYNC", "Failed to get response (code: " + response.statusCode + ") for URL > " + url[0])
+                    Log.i("DOWNLOAD_ASYNC", "Failed to get response (code: " + response.statusCode + ") for URL > " + taskArguments[0])
                     null
                 }
             }

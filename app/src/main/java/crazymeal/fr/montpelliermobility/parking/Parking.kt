@@ -7,7 +7,7 @@ import org.xml.sax.InputSource
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
-data class Parking(val technicalName: String, val name: String, val freePlaces: Int, val maxPlaces: Int) : Parcelable {
+data class Parking(val technicalName: String, var name: String?, val freePlaces: Int, val maxPlaces: Int) : Parcelable {
     val occupiedPlaces get() = this.maxPlaces - this.freePlaces
     val occupation get() = (this.occupiedPlaces * 100) / this.maxPlaces
 
@@ -47,39 +47,10 @@ data class Parking(val technicalName: String, val name: String, val freePlaces: 
 
             val parkingName = document.getElementsByTagName("Name").item(0).textContent
 
-            val associatedName = this.getAssociatedName(parkingName)
-
             val freePlaces = document.getElementsByTagName("Free").item(0).textContent
             val totalPlaces = document.getElementsByTagName("Total").item(0).textContent
 
-            return Parking(parkingName, associatedName, freePlaces.toInt(), totalPlaces.toInt())
-        }
-
-        private fun getAssociatedName(parkingName: String?): String {
-            return when(parkingName) {
-                "ANTI" -> "Antigone"
-                "ARCT" -> "Arc de Triomphe"
-                "COME" -> "Comédie"
-                "CORU" -> "Corum"
-                "EURO" -> "Europa"
-                "FOCH" -> "Foch"
-                "GAMB" -> "Gambetta"
-                "GARE" -> "Gare"
-                "Triangle" -> "Triangle"
-                "Pitot" -> "Pitot"
-                "CIRC" -> "Circe"
-                "GARD" -> "Garcia Lorca"
-                "MOSS" -> "Mosson"
-                "SABI" -> "Sabines"
-                "SABL" -> "Sablassou"
-                "SJLC" -> "Saint Jean Le Sec"
-                "MEDC" -> "Euromédecine"
-                "OCCI" -> "Occitanie"
-                "VICA" -> "Vicarello"
-                "GAUMONT-EST" -> "Gaumont EST"
-                "GAUMONT-OUEST" -> "Gaumont OUEST"
-                else -> parkingName ?: "?"
-            }
+            return Parking(parkingName, null, freePlaces.toInt(), totalPlaces.toInt())
         }
     }
 }
