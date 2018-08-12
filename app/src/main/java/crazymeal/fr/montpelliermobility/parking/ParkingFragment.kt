@@ -28,30 +28,6 @@ class ParkingFragment : Fragment() {
 
     private lateinit var parkingList: ArrayList<Parking>
 
-    private val urlToScrap = mapOf(
-            "ANTI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ANTI.xml",
-            "ARCT" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ARCT.xml",
-            "COME" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_COME.xml",
-            "CORU" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CORU.xml",
-            "EURO" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_EURO.xml",
-            "FOCH" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_FOCH.xml",
-            "GAMB" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GAMB.xml",
-            "GARE" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARE.xml",
-            "Triangle" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_TRIA.xml",
-            "Pitot" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_PITO.xml",
-            "CIRC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CIRC.xml",
-            "GARD" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARC.xml",
-            "MOSS" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml",
-            "SABI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABI.xml",
-            "SABL" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABL.xml",
-            "SJLC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_STJ_SJLC.xml",
-            "MEDC" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MEDC.xml",
-            "OCCI" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_OCCI.xml",
-            "VICA" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_CAS_VICA.xml",
-            "GAUMONT-EST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA109.xml",
-            "GAUMONT-OUEST" to "http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GA250.xml"
-    )
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
@@ -145,8 +121,11 @@ class ParkingFragment : Fragment() {
         Log.d("DOWNLOADING_QUEUE", "Setting refresh to true")
         this.mSwipeRefreshLayout.isRefreshing = true
 
-        this.urlToScrap.forEach { id, url ->
-            Log.d("DOWNLOADING_QUEUE", "Adding URL ${url} to queue with id ${id}")
+        this.resources.getStringArray(R.array.parking_ids).forEach { id ->
+            val arrayId = this.resources.getIdentifier(id, "array", this.context!!.packageName)
+            val url = this.resources.getStringArray(arrayId)[1]
+
+            Log.d("DOWNLOADING_QUEUE", "Adding URL $url to queue with id $id")
             this.currentlyDownloadingParking.add(id)
 
             ParkingScrapAsyncTask(this).execute(url)
