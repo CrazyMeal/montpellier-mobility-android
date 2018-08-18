@@ -1,5 +1,6 @@
 package crazymeal.fr.montpelliermobility
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import crazymeal.fr.montpelliermobility.map.MapActivity
 import crazymeal.fr.montpelliermobility.map.MapFragment
 import crazymeal.fr.montpelliermobility.parking.Parking
 import crazymeal.fr.montpelliermobility.parking.ParkingFragment
@@ -77,15 +79,11 @@ class MainActivity : AppCompatActivity(),
 
     override fun onListFragmentInteraction(parking: Parking?) {
         Log.d("FRAGMENT", "Triggered onListFragmentInteraction method with parking > ${parking ?: ""}")
+        this.loadMapFragment()
     }
 
     override fun onFragmentInteraction(uri: Uri) {
         Log.d("MAP_FRAGMENT", "Triggered onFragmentInteraction method")
-    }
-
-    override fun onStart() {
-        this.loadMapFragment()
-        super.onStart()
     }
 
     private fun loadBlankFragment() {
@@ -105,9 +103,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun loadMapFragment() {
-        supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
-                .replace(R.id.layout_content, MapFragment())
-                .commit()
+        val mapActivityIntent = Intent(this, MapActivity::class.java)
+        startActivity(mapActivityIntent)
     }
 }

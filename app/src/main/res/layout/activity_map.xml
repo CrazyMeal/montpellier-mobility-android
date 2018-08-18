@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".map.MapActivity">
+
+    <ScrollView
+        android:id="@+id/map_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/map_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:layout_height="match_parent">
+
+            <!--<org.osmdroid.views.MapView-->
+                <!--android:id="@+id/map"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="300dp">-->
+
+            <!--</org.osmdroid.views.MapView>-->
+
+            <crazymeal.fr.montpelliermobility.map.MobilityMap
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1000dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
