@@ -11,6 +11,8 @@ import android.view.*
 import crazymeal.fr.montpelliermobility.R
 import kotlinx.android.synthetic.main.fragment_parking_list.*
 
+private const val TAG_DOWNLODING_QUEUE = "DOWNLOADING_QUEUE"
+
 /**
  * A fragment representing a list of Parkings.
  * Activities containing this fragment MUST implement the
@@ -18,20 +20,17 @@ import kotlinx.android.synthetic.main.fragment_parking_list.*
  */
 class ParkingFragment : Fragment() {
 
-    private var columnCount = 1
-
-    private var currentlyDownloadingParking: MutableList<String> = ArrayList()
+    private var mColumnCount = 1
+    private var mCurrentlyDownloadingParking: MutableList<String> = ArrayList()
 
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-
-    private lateinit var listener: OnListFragmentInteractionListener
-
-    private lateinit var parkingList: ArrayList<Parking>
+    private lateinit var mListener: OnListFragmentInteractionListener
+    private lateinit var mParkingList: ArrayList<Parking>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
-            listener = context
+            mListener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
@@ -43,7 +42,7 @@ class ParkingFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            mColumnCount = it.getInt(ARG_COLUMN_COUNT)
         }
     }
 
@@ -63,8 +62,8 @@ class ParkingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         with(this.list) {
             layoutManager = when {
-                columnCount <= 1 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
+                mColumnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, mColumnCount)
             }
         }
     }
@@ -72,8 +71,8 @@ class ParkingFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        parkingList = ArrayList()
-        this.list.adapter = ParkingFragmentAdapter(parkingList, listener)
+        mParkingList = ArrayList()
+        this.list.adapter = ParkingFragmentAdapter(mParkingList, mListener)
         this.loadParkingDatas()
     }
 
@@ -99,18 +98,18 @@ class ParkingFragment : Fragment() {
     }
 
     fun notifyAdapter(parking: Parking) {
-        with(this.parkingList) {
+        with(this.mParkingList) {
             removeIf { p -> p.technicalName == parking.technicalName }
             add(parking)
         }
 
-        with(this.currentlyDownloadingParking) {
-            Log.d("DOWNLOADING_QUEUE", "Removing technical id ${parking.technicalName} from downloading queue")
+        with(this.mCurrentlyDownloadingParking) {
+            Log.d(TAG_DOWNLODING_QUEUE, "Removing technical id ${parking.technicalName} from downloading queue")
             remove(parking.technicalName)
 
-            Log.d("DOWNLOADING_QUEUE", "Download queue now looks like: ${this}")
+            Log.d(TAG_DOWNLODING_QUEUE, "Download queue now looks like: ${this}")
             if (isEmpty()) {
-                Log.d("DOWNLOADING_QUEUE", "All URLs has been downloaded, setting refresh to false and notifying adapter")
+                Log.d(TAG_DOWNLODING_QUEUE, "All URLs has been downloaded, setting refresh to false and notifying adapter")
                 mSwipeRefreshLayout.isRefreshing = false
                 list.adapter.notifyDataSetChanged()
             }
@@ -118,7 +117,7 @@ class ParkingFragment : Fragment() {
     }
 
     private fun loadParkingDatas() {
-        Log.d("DOWNLOADING_QUEUE", "Setting refresh to true")
+        Log.d(TAG_DOWNLODING_QUEUE, "Setting refresh to true")
         this.mSwipeRefreshLayout.isRefreshing = true
 
         this.resources.getStringArray(R.array.parking_ids).forEach { id ->
@@ -126,8 +125,8 @@ class ParkingFragment : Fragment() {
             val parkingName = this.resources.getStringArray(arrayId)[0]
             val url = this.resources.getStringArray(arrayId)[1]
 
-            Log.d("DOWNLOADING_QUEUE", "Adding URL $url to queue with id $id")
-            this.currentlyDownloadingParking.add(id)
+            Log.d(TAG_DOWNLODING_QUEUE, "Adding URL $url to queue with id $id")
+            this.mCurrentlyDownloadingParking.add(id)
 
             ParkingScrapAsyncTask(this).execute(parkingName, url)
         }
@@ -157,7 +156,7 @@ class ParkingFragment : Fragment() {
                 ParkingFragment()
                         .apply {
                     arguments = Bundle().apply {
-                        putInt(ARG_COLUMN_COUNT, columnCount)
+                        putInt(ARG_COLUMN_COUNT, mColumnCount)
                     }
                 }
     }

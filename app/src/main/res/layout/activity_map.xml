@@ -63,7 +63,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_parking_name">
 
                     <ProgressBar
-                        android:id="@+id/progressBar"
+                        android:id="@+id/map_details_dynamic_progressBar"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                         android:text="@string/placeholder_parking_occupied_places"
                         app:layout_constraintEnd_toStartOf="@+id/map_details_static_separator"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+                        app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_progressBar" />
 
                     <TextView
                         android:id="@+id/map_details_static_separator"
@@ -96,7 +96,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+                        app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_progressBar" />
 
                     <TextView
                         android:id="@+id/map-details_dynamic_total_places"
@@ -107,7 +107,7 @@
                         android:text="@string/placeholder_parking_total_places"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/map_details_static_separator"
-                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+                        app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_progressBar" />
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.constraint.ConstraintLayout>

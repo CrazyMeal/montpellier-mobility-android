@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import crazymeal.fr.montpelliermobility.map.MapActivity
-import crazymeal.fr.montpelliermobility.map.MapFragment
 import crazymeal.fr.montpelliermobility.parking.Parking
 import crazymeal.fr.montpelliermobility.parking.ParkingFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,8 +18,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener,
-        ParkingFragment.OnListFragmentInteractionListener,
-        MapFragment.OnFragmentInteractionListener {
+        ParkingFragment.OnListFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +67,7 @@ class MainActivity : AppCompatActivity(),
                 this.loadParkingListFragment()
             }
             R.id.nav_map -> {
-                this.loadMapFragment()
+                this.loadMapFragment(null)
             }
         }
 
@@ -79,11 +77,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onListFragmentInteraction(parking: Parking?) {
         Log.d("FRAGMENT", "Triggered onListFragmentInteraction method with parking > ${parking ?: ""}")
-        this.loadMapFragment()
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-        Log.d("MAP_FRAGMENT", "Triggered onFragmentInteraction method")
+        this.loadMapFragment(parking)
     }
 
     private fun loadBlankFragment() {
@@ -102,8 +96,11 @@ class MainActivity : AppCompatActivity(),
             .commit()
     }
 
-    private fun loadMapFragment() {
-        val mapActivityIntent = Intent(this, MapActivity::class.java)
-        startActivity(mapActivityIntent)
+    private fun loadMapFragment(parking: Parking?) {
+        parking.let {
+            val mIntent = Intent(this, MapActivity::class.java)
+            mIntent.putExtra("parking", it)
+            startActivity(mIntent)
+        }
     }
 }

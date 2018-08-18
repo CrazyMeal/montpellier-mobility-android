@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import crazymeal.fr.montpelliermobility.R
+import crazymeal.fr.montpelliermobility.parking.Parking
 import kotlinx.android.synthetic.main.activity_map.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
@@ -53,6 +54,17 @@ class MapActivity : AppCompatActivity() {
         this.setInitialPositionOfView()
 
         this.addParkingPointer()
+
+        val parking: Parking = this.intent.extras.get("parking") as Parking
+        this.setParkingInformationOnView(parking)
+    }
+
+    private fun setParkingInformationOnView(parking: Parking) {
+        map_details_dynamic_parking_name.text = parking.name
+        map_details_dynamic_occupied_places.text = parking.occupiedPlaces.toString()
+        map_details_dynamic_total_places.text = parking.maxPlaces.toString()
+        map_details_dynamic_progressBar.max = 100
+        map_details_dynamic_progressBar.progress = parking.occupation
     }
 
     private fun setInitialPositionOfView() {
