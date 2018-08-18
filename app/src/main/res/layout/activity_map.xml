@@ -19,22 +19,98 @@
             android:orientation="vertical"
             tools:layout_height="match_parent">
 
-            <!--<org.osmdroid.views.MapView-->
-                <!--android:id="@+id/map"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="300dp">-->
-
-            <!--</org.osmdroid.views.MapView>-->
-
             <crazymeal.fr.montpelliermobility.map.MobilityMap
                 android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_height="300dp" />
+                android:layout_height="300dp">
 
-            <View
-                android:id="@+id/view"
+            </crazymeal.fr.montpelliermobility.map.MobilityMap>
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="1000dp" />
+                android:layout_height="1000dp">
+
+                <TextView
+                    android:id="@+id/map_details_dynamic_parking_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/placeholder_default_string"
+                    android:textAppearance="@android:style/TextAppearance.Material.Large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/map_details_static_parking_occupation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/map_details_static_occupation"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_parking_name" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="135dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/map_details_dynamic_parking_name">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="25"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/map_details_dynamic_occupied_places"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placeholder_parking_occupied_places"
+                        app:layout_constraintEnd_toStartOf="@+id/map_details_static_separator"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+                    <TextView
+                        android:id="@+id/map_details_static_separator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/separator_slash"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+                    <TextView
+                        android:id="@+id/map-details_dynamic_total_places"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placeholder_parking_total_places"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/map_details_static_separator"
+                        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
