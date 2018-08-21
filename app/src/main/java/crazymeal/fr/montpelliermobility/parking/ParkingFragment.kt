@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import crazymeal.fr.montpelliermobility.R
 import kotlinx.android.synthetic.main.fragment_parking_list.*
+import java.text.NumberFormat
 
 private const val TAG_DOWNLODING_QUEUE = "DOWNLOADING_QUEUE"
 
@@ -125,10 +126,15 @@ class ParkingFragment : Fragment() {
             val parkingName = this.resources.getStringArray(arrayId)[0]
             val url = this.resources.getStringArray(arrayId)[1]
 
+            val latitude =  NumberFormat.getInstance().parse(this.resources.getStringArray(arrayId)[2]).toDouble()
+            val longitude =  NumberFormat.getInstance().parse(this.resources.getStringArray(arrayId)[3]).toDouble()
+
+            val parkingInfo = arrayOf(url, parkingName, latitude, longitude)
+
             Log.d(TAG_DOWNLODING_QUEUE, "Adding URL $url to queue with id $id")
             this.mCurrentlyDownloadingParking.add(id)
 
-            ParkingScrapAsyncTask(this).execute(parkingName, url)
+            ParkingScrapAsyncTask(this).execute(parkingInfo)
         }
     }
 

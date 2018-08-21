@@ -25,159 +25,159 @@
     <string-array name="parking_ids">
         <item>ANTI</item>
         <item>ARCT</item>
-        <!--<item>COME</item>-->
-        <!--<item>CORU</item>-->
-        <!--<item>EURO</item>-->
-        <!--<item>FOCH</item>-->
-        <!--<item>GAMB</item>-->
-        <!--<item>GARE</item>-->
-        <!--<item>Triangle</item>-->
-        <!--<item>Pitot</item>-->
-        <!--<item>CIRC</item>-->
-        <!--<item>GARD</item>-->
-        <!--<item>MOSS</item>-->
-        <!--<item>SABI</item>-->
-        <!--<item>SABL</item>-->
-        <!--<item>SJLC</item>-->
-        <!--<item>MEDC</item>-->
-        <!--<item>OCCI</item>-->
-        <!--<item>VICA</item>-->
+        <item>COME</item>
+        <item>CORU</item>
+        <item>EURO</item>
+        <item>FOCH</item>
+        <item>GAMB</item>
+        <item>GARE</item>
+        <item>Triangle</item>
+        <item>Pitot</item>
+        <item>CIRC</item>
+        <item>GARD</item>
+        <item>MOSS</item>
+        <item>SABI</item>
+        <item>SABL</item>
+        <item>SJLC</item>
+        <item>MEDC</item>
+        <item>OCCI</item>
+        <item>VICA</item>
     </string-array>
 
     <string-array name="ANTI">
         <item>Antigone</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ANTI.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.609168</item>
+        <item>3.888141</item>
     </string-array>
 
     <string-array name="ARCT">
         <item>Arc de Triomphe</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_ARCT.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.611058</item>
+        <item>3.873076</item>
     </string-array>
 
     <string-array name="COME">
         <item>Comédie</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_COME.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.608696</item>
+        <item>3.880266</item>
     </string-array>
 
     <string-array name="CORU">
         <item>Corum</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CORU.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.613631</item>
+        <item>3.881832</item>
     </string-array>
 
     <string-array name="EURO">
         <item>Europa</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_EURO.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.608016</item>
+        <item>3.894152</item>
     </string-array>
 
     <string-array name="FOCH">
         <item>Foch</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_FOCH.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.610679</item>
+        <item>3.876420</item>
     </string-array>
 
 
     <string-array name="GAMB">
         <item>Gambetta</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GAMB.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.605418</item>
+        <item>3.874112</item>
     </string-array>
 
     <string-array name="GARE">
         <item>Gare</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARE.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.603807</item>
+        <item>3.878896</item>
     </string-array>
 
 
     <string-array name="Triangle">
         <item>Triangle</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_TRIA.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.609341</item>
+        <item>3.882019</item>
     </string-array>
 
     <string-array name="Pitot">
         <item>Pitot</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_PITO.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.612905</item>
+        <item>3.869957</item>
     </string-array>
 
     <string-array name="CIRC">
         <item>Circe</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_CIRC.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.605062</item>
+        <item>3.916823</item>
     </string-array>
 
     <string-array name="GARD">
         <item>Garcia Lorca</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_GARC.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.590446</item>
+        <item>3.890848</item>
     </string-array>
 
     <string-array name="MOSS">
         <item>Mosson</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MOSS.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.615841</item>
+        <item>3.819601</item>
     </string-array>
 
     <string-array name="SABI">
         <item>Sabines</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABI.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.584520</item>
+        <item>3.859913</item>
     </string-array>
 
     <string-array name="SABL">
         <item>Sablassou</item>
         <item>"http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_SABL.xml"</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.633433</item>
+        <item>3.922224</item>
     </string-array>
 
 
     <string-array name="SJLC">
         <item>Saint Jean Le Sec</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_STJ_SJLC.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.571129</item>
+        <item>3.837807</item>
     </string-array>
 
     <string-array name="MEDC">
         <item>Euromédecine</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_MEDC.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.639016</item>
+        <item>3.828151</item>
     </string-array>
 
     <string-array name="OCCI">
         <item>Occitanie</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_MTP_OCCI.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.636045</item>
+        <item>3.847608</item>
     </string-array>
 
     <string-array name="VICA">
         <item>Vicarello</item>
         <item>http://data.montpellier3m.fr/sites/default/files/ressources/FR_CAS_VICA.xml</item>
-        <item>0.0</item>
-        <item>0.0</item>
+        <item>43.632640</item>
+        <item>3.898382</item>
     </string-array>
 
 </resources>

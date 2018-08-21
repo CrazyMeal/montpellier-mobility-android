@@ -1,7 +1,6 @@
 package crazymeal.fr.montpelliermobility
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -31,6 +30,8 @@ class MainActivity : AppCompatActivity(),
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        this.loadParkingListFragment()
     }
 
     override fun onBackPressed() {
@@ -100,6 +101,7 @@ class MainActivity : AppCompatActivity(),
         parking.let {
             val mIntent = Intent(this, MapActivity::class.java)
             mIntent.putExtra("parking", it)
+
             startActivity(mIntent)
         }
     }

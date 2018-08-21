@@ -51,9 +51,9 @@ class MapActivity : AppCompatActivity() {
 
         this.setBoundingBoxToCity()
         this.activateLocationOverlay()
-        this.setInitialPositionOfView()
+        //this.setInitialPositionOfView()
 
-        this.addParkingPointer()
+        //this.addParkingPointer()
 
         val parking: Parking = this.intent.extras.get("parking") as Parking
         this.setParkingInformationOnView(parking)
@@ -65,6 +65,30 @@ class MapActivity : AppCompatActivity() {
         map_details_dynamic_total_places.text = parking.maxPlaces.toString()
         map_details_dynamic_progressBar.max = 100
         map_details_dynamic_progressBar.progress = parking.occupation
+
+        map.controller.setZoom(19.0)
+        Log.d(TAG_MAPVIEW_SETTINGS, "Creating point with latidude ${parking.latitude} and longitude ${parking.longitude}")
+        val mStartPoint = GeoPoint(parking.latitude ?: LATITUDE_STARTING_POINT, parking.longitude ?: LONGITUDE_STARTING_POINT)
+        map.controller.setCenter(mStartPoint)
+
+        //your items
+        val items = ArrayList<OverlayItem>()
+        items.add(OverlayItem("Title", "Description", GeoPoint(parking.latitude ?: LATITUDE_STARTING_POINT, parking.longitude ?: LONGITUDE_STARTING_POINT)))
+        val itemGestureListener = object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+            override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
+                return true
+            }
+
+            override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
+                return false
+            }
+        }
+
+        //the overlay
+        val mOverlay = ItemizedOverlayWithFocus<OverlayItem>(items, itemGestureListener, this)
+        mOverlay.setFocusItemsOnTap(true);
+
+        map.overlays.add(mOverlay);
     }
 
     private fun setInitialPositionOfView() {
