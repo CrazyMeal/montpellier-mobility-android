@@ -126,8 +126,8 @@ class ParkingFragment : Fragment() {
             val parkingName = this.resources.getStringArray(arrayId)[0]
             val url = this.resources.getStringArray(arrayId)[1]
 
-            val latitude =  NumberFormat.getInstance().parse(this.resources.getStringArray(arrayId)[2]).toDouble()
-            val longitude =  NumberFormat.getInstance().parse(this.resources.getStringArray(arrayId)[3]).toDouble()
+            val latitude =  this.resources.getStringArray(arrayId)[2].toDouble()
+            val longitude =  this.resources.getStringArray(arrayId)[3].toDouble()
 
             val parkingInfo = arrayOf(url, parkingName, latitude, longitude)
 

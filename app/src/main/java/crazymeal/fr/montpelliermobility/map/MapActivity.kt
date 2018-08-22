@@ -3,6 +3,7 @@ package crazymeal.fr.montpelliermobility.map
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.ViewTreeObserver
 import crazymeal.fr.montpelliermobility.R
 import crazymeal.fr.montpelliermobility.parking.Parking
 import kotlinx.android.synthetic.main.activity_map.*
@@ -31,6 +32,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_map)
 
         // We use the default tiles source
@@ -49,14 +51,25 @@ class MapActivity : AppCompatActivity() {
         // Setting map min level
         map.minZoomLevel = 14.0
 
-        this.setBoundingBoxToCity()
         this.activateLocationOverlay()
-        //this.setInitialPositionOfView()
 
-        //this.addParkingPointer()
 
-        val parking: Parking = this.intent.extras.get("parking") as Parking
-        this.setParkingInformationOnView(parking)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        map.viewTreeObserver.addOnGlobalLayoutListener (
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    map.viewTreeObserver.removeOnGlobalLayoutListener(this);
+                    val parking: Parking = intent.extras.get("parking") as Parking
+                    setParkingInformationOnView(parking)
+
+                    setBoundingBoxToCity()
+                }
+            }
+        )
+        map.onResume()
     }
 
     private fun setParkingInformationOnView(parking: Parking) {
